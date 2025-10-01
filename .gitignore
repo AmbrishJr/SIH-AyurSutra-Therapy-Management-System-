@@ -1,0 +1,52 @@
+# Mac system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Logs
+*.log
+
+# Django stuff
+db.sqlite3
+*.pot
+*.pyc
+# Mac system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Logs
+*.log
+
+# Django stuff
+db.sqlite3
+*.pot
+*.pyc
+
+# Media/static (optional if auto-generated)
+media/
+staticfiles/
+
+# Large files
+*.zip
+*.rar
+*.tar.gz
+*.csv
+*.h5
+*.pkl

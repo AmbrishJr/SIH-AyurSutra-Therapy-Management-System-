@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management - AyurSutra Admin</title>
+    <style>
+        /* CSS Variables for Theme Support */
+        :root {
+            /* Light theme variables */
+            --bg-primary: #f8fafc;
+            --bg-secondary: white;
+            --bg-gradient-start: #ffffff;
+            --bg-gradient-end: #faf5ff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --card-bg: white;
+            --input-bg: #f8fafc;
+            --hover-bg: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-gradient-start: #1e293b;
+            --bg-gradient-end: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            --shadow-medium: rgba(0, 0, 0, 0.3);
+            --card-bg: #1e293b;
+            --input-bg: #334155;
+            --hover-bg: #334155;
+        }
+
+        /* Enhanced Color Palette */
+        :root {
+            --primary-purple: #667eea;
+            --secondary-purple: #764ba2;
+            --light-purple: #a855f7;
+            --dark-purple: #5b21b6;
+            --purple-accent: #8b5cf6;
+            --purple-light: #f3f4f6;
+            --purple-bg: #faf5ff;
+            --purple-text: #6b46c1;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --error-red: #ef4444;
+            --info-blue: #06b6d4;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #a855f7 0%, #6b46c1 100%);
+            --gradient-accent: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .theme-toggle {
+            background: rgba(102, 126, 234, 0.9);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50px;
+            padding: 12px 18px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(118, 75, 162, 0.9);
+            border-color: rgba(118, 75, 162, 0.3);
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle:hover {
+            background: rgba(118, 75, 162, 1);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 2px 0 15px rgba(102, 126, 234, 0.15);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.05)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="60" cy="60" r="1.5" fill="rgba(255,255,255,0.08)"/></svg>');
+            pointer-events: none;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: white;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+            margin: 2px 0;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: rgba(255, 255, 255, 0.1);
+            transition: width 0.3s ease;
+            border-radius: 0 25px 25px 0;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            width: 100%;
+        }
+
+        .nav-item:hover, 
+        .nav-item.active {
+            color: white;
+            border-left-color: rgba(255, 255, 255, 0.4);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 0 25px 25px 0;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        .nav-item.active .nav-icon {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 0;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px var(--shadow-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .header-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 8px 15px;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        /* Controls Section */
+        .controls-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .control-input {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--hover-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--input-bg);
+        }
+
+        /* Patients Table */
+        .patients-table-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .patients-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        .patients-table th,
+        .patients-table td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .patients-table th {
+            background: var(--input-bg);
+            font-weight: 600;
+            color: var(--text-primary);
+            position: sticky;
+            top: 0;
+        }
+
+        .patients-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .patients-table tbody tr:hover {
+            background: var(--hover-bg);
+        }
+
+        .progress-container {
+            margin-top: 5px;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+        }
+
+        .status-completed {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--info-blue);
+        }
+
+        .actions-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-view {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary-purple);
+        }
+
+        .action-edit {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-orange);
+        }
+
+        .action-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-red);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Analytics Section */
+        .analytics-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+        }
+
+        .analytics-card.total { border-left: 4px solid var(--primary-purple); }
+        .analytics-card.active { border-left: 4px solid var(--success-green); }
+        .analytics-card.completed { border-left: 4px solid var(--info-blue); }
+
+        .analytics-value {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .analytics-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .analytics-change {
+            font-size: 0.8rem;
+            color: var(--success-green);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-action-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--input-bg);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .quick-action-item:hover {
+            background: var(--hover-bg);
+            color: var(--primary-purple);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .patient-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-group {
+            background: var(--input-bg);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+                padding: 20px;
+            }
+            
+            .analytics-section {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .theme-toggle-container {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .theme-toggle {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle button -->
+    <div class="theme-toggle-container">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+            <span class="theme-icon" id="themeIcon">🌙</span>
+            <span id="themeText">Dark</span>
+        </button>
+    </div>
+
+    <div class="dashboard-container">
+         <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">AyurSutra</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="home_admin.html" class="nav-item active">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="patients.html" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    </svg>
+                    Patients
+                </a>
+                <a href="practitioner.html" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                    </svg>
+                    Practitioners
+                </a>
+                <a href="schedule.html" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    </svg>
+                    Schedules
+                </a>
+                <a href="therapy.html" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Therapies
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Reports
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>Patient Management</h1>
+                    <div class="header-date" id="currentDateTime">Loading...</div>
+                </div>
+                <div class="search-bar">
+                    <svg class="search-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                    </svg>
+                    <input type="text" placeholder="Search patients, ID, therapy..." id="searchInput">
+                </div>
+                <!-- Mic Icon for Voice Assistant -->
+                <button id="voiceBtn" title="Voice Assistant" style="background:none;border:none;outline:none;cursor:pointer;margin-left:15px;">
+                    <svg id="micIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" style="color:#667eea;">
+                        <circle cx="12" cy="12" r="12" fill="#f3f4f6"/>
+                        <path d="M12 16a3 3 0 003-3V9a3 3 0 10-6 0v4a3 3 0 003 3zm5-3a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 10-2 0 7 7 0 0014 0z" fill="#667eea"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Controls Section -->
+                <div class="controls-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Search & Filter</h3>
+                        <button class="btn btn-primary" onclick="openAddPatientModal()">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Add New Patient
+                        </button>
+                    </div>
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label class="control-label">Search</label>
+                            <input type="text" class="control-input" placeholder="Name, Patient ID, Therapy..." id="mainSearch">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Therapy Type</label>
+                            <select class="control-input" id="therapyFilter">
+                                <option value="">All Therapies</option>
+                                <option value="Panchakarma Detox">Panchakarma Detox</option>
+                                <option value="Ayurvedic Rejuvenation">Ayurvedic Rejuvenation</option>
+                                <option value="Shirodhara">Shirodhara</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Status</label>
+                            <select class="control-input" id="statusFilter">
+                                <option value="">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Start Date</label>
+                            <input type="date" class="control-input" id="startDate">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">End Date</label>
+                            <input type="date" class="control-input" id="endDate">
+                        </div>
+                        <div class="control-group">
+                            <button class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div class="analytics-section">
+                    <div class="analytics-card total">
+                        <div class="analytics-value" id="totalPatients">1,247</div>
+                        <div class="analytics-label">Total Patients Registered</div>
+                        <div class="analytics-change">+12% this month</div>
+                    </div>
+                    <div class="analytics-card active">
+                        <div class="analytics-value" id="activePatients">156</div>
+                        <div class="analytics-label">Active Patients</div>
+                        <div class="analytics-change">23 ongoing therapies</div>
+                    </div>
+                    <div class="analytics-card completed">
+                        <div class="analytics-value" id="completedTherapies">89</div>
+                        <div class="analytics-label">Completed Therapies</div>
+                        <div class="analytics-change">87% success rate</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">Panchakarma</div>
+                        <div class="analytics-label">Most Common Therapy</div>
+                        <div class="analytics-change">68% of all cases</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">Dr. Sharma</div>
+                        <div class="analytics-label">Top Practitioner</div>
+                        <div class="analytics-change">45 active patients</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">21 Days</div>
+                        <div class="analytics-label">Avg. Therapy Duration</div>
+                        <div class="analytics-change">↓3 days vs last month</div>
+                    </div>
+                </div>
+
+                <!-- Patients Table Section -->
+                <div class="patients-table-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Patient List</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary" onclick="exportPatients()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                                Export CSV
+                            </button>
+                            <button class="btn btn-secondary">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Generate Report
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="patients-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Age / Gender</th>
+                                    <th>Therapy Type</th>
+                                    <th>Practitioner</th>
+                                    <th>Progress</th>
+                                    <th>Next Session</th>
+                                    <th>Contact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientsTableBody">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <div class="section-header">
+                        <h3 class="section-title">Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <a href="#" class="quick-action-item">
+                            <svg class="quick-action-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                            </svg>
+                            Schedule New Therapy
+                        </a>
+                        <a href="#" class="quick-action-item">
+                            <svg class="quick-action-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM9 18v-6h2v6H9z"/>
+                            </svg>
+                            Send Notification
+                        </a>
+                        <a href="#" class="quick-action-item">
+                            <svg class="quick-action-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                            </svg>
+                            Assign Practitioner
+                        </a>
+                        <a href="#" class="quick-action-item">
+                            <svg class="quick-action-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            Bulk Operations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Profile Modal -->
+    <div class="modal" id="patientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Patient Profile</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample patients data
+        const patients = [
+            {
+                ID: 'P001',
+                Name: 'Rajesh Kumar',
+                Age: 45,
+                Gender: 'Male',
+                Therapy: 'Panchakarma Detox',
+                Practitioner: 'Dr. Priya Sharma',
+                Progress: { CurrentDay: 8, TotalDays: 21 },
+                NextSession: '2025-09-07 10:00 AM',
+                Contact: { Phone: '+91 98765 43210', Email: 'rajesh@example.com' },
+                Status: 'Active',
+                MedicalHistory: 'Hypertension, Diabetes Type 2',
+                TherapyPlan: { StartDate: '2025-08-15', EndDate: '2025-09-30', SessionsPlanned: 15 },
+                SessionHistory: { Completed: 7, Missed: 1 },
+                NotificationsSent: ['Pre-therapy reminder', 'Post-therapy care instructions'],
+                LastFeedback: 'Feeling much better, energy levels improved'
+            },
+            {
+                ID: 'P002',
+                Name: 'Sita Devi',
+                Age: 38,
+                Gender: 'Female',
+                Therapy: 'Ayurvedic Rejuvenation',
+                Practitioner: 'Dr. Arun Joshi',
+                Progress: { CurrentDay: 15, TotalDays: 30 },
+                NextSession: '2025-09-08 02:00 PM',
+                Contact: { Phone: '+91 87654 32109', Email: 'sita@example.com' },
+                Status: 'Active',
+                MedicalHistory: 'Chronic fatigue, Insomnia',
+                TherapyPlan: { StartDate: '2025-08-01', EndDate: '2025-09-30', SessionsPlanned: 20 },
+                SessionHistory: { Completed: 14, Missed: 0 },
+                NotificationsSent: ['Treatment schedule', 'Dietary guidelines'],
+                LastFeedback: 'Sleep quality has improved significantly'
+            },
+            {
+                ID: 'P003',
+                Name: 'Amit Singh',
+                Age: 50,
+                Gender: 'Male',
+                Therapy: 'Panchakarma Detox',
+                Practitioner: 'Dr. Priya Sharma',
+                Progress: { CurrentDay: 21, TotalDays: 21 },
+                NextSession: 'Completed',
+                Contact: { Phone: '+91 76543 21098', Email: 'amit@example.com' },
+                Status: 'Completed',
+                MedicalHistory: 'Arthritis, High cholesterol',
+                TherapyPlan: { StartDate: '2025-07-15', EndDate: '2025-08-15', SessionsPlanned: 12 },
+                SessionHistory: { Completed: 12, Missed: 0 },
+                NotificationsSent: ['Completion certificate', 'Follow-up care plan'],
+                LastFeedback: 'Excellent results, joint pain reduced by 80%'
+            },
+            {
+                ID: 'P004',
+                Name: 'Priya Sharma',
+                Age: 29,
+                Gender: 'Female',
+                Therapy: 'Shirodhara',
+                Practitioner: 'Dr. Meera Nair',
+                Progress: { CurrentDay: 5, TotalDays: 14 },
+                NextSession: '2025-09-09 11:00 AM',
+                Contact: { Phone: '+91 65432 10987', Email: 'priya.s@example.com' },
+                Status: 'Active',
+                MedicalHistory: 'Anxiety, Migraine',
+                TherapyPlan: { StartDate: '2025-09-01', EndDate: '2025-09-20', SessionsPlanned: 10 },
+                SessionHistory: { Completed: 4, Missed: 0 },
+                NotificationsSent: ['Welcome message', 'Session preparation tips'],
+                LastFeedback: 'Feeling relaxed after each session'
+            }
+        ];
+
+        let filteredPatients = [...patients];
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            updateThemeButton(newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            }
+        }
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Kolkata'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-IN', options) + ' IST';
+        }
+
+        // Render patients table
+        function renderPatientsTable(patientsList = filteredPatients) {
+            const tbody = document.getElementById('patientsTableBody');
+            tbody.innerHTML = '';
+
+            patientsList.forEach((patient, index) => {
+                const progressPercent = Math.round((patient.Progress.CurrentDay / patient.Progress.TotalDays) * 100);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${patient.ID}</strong></td>
+                    <td>${patient.Name}</td>
+                    <td>${patient.Age} / ${patient.Gender[0]}</td>
+                    <td>${patient.Therapy}</td>
+                    <td>${patient.Practitioner}</td>
+                    <td>
+                        <div class="progress-container">
+                            <div class="progress-text">Day ${patient.Progress.CurrentDay} of ${patient.Progress.TotalDays}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${patient.NextSession}</td>
+                    <td>
+                        <div style="font-size: 0.8rem;">
+                            <div>📱 ${patient.Contact.Phone}</div>
+                            <div>✉️ ${patient.Contact.Email}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="actions-group">
+                            <button class="action-btn action-view" onclick="viewPatient(${index})" title="View Profile">👁️</button>
+                            <button class="action-btn action-edit" onclick="editPatient(${index})" title="Edit">✏️</button>
+                            <button class="action-btn action-delete" onclick="deletePatient(${index})" title="Delete">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter patients
+        function filterPatients() {
+            const searchTerm = document.getElementById('mainSearch').value.toLowerCase();
+            const therapyFilter = document.getElementById('therapyFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            filteredPatients = patients.filter(patient => {
+                const matchesSearch = !searchTerm || 
+                    patient.Name.toLowerCase().includes(searchTerm) ||
+                    patient.ID.toLowerCase().includes(searchTerm) ||
+                    patient.Therapy.toLowerCase().includes(searchTerm);
+                
+                const matchesTherapy = !therapyFilter || patient.Therapy === therapyFilter;
+                const matchesStatus = !statusFilter || patient.Status === statusFilter;
+                
+                // Simple date filtering (would need more complex logic for real implementation)
+                const matchesDateRange = true;
+
+                return matchesSearch && matchesTherapy && matchesStatus && matchesDateRange;
+            });
+
+            renderPatientsTable();
+            updateAnalytics();
+        }
+
+        // Update analytics
+        function updateAnalytics() {
+            document.getElementById('totalPatients').textContent = patients.length.toLocaleString();
+            document.getElementById('activePatients').textContent = patients.filter(p => p.Status === 'Active').length;
+            document.getElementById('completedTherapies').textContent = patients.filter(p => p.Status === 'Completed').length;
+        }
+
+        // Patient actions
+        function viewPatient(index) {
+            const patient = filteredPatients[index];
+            const modal = document.getElementById('patientModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+
+            modalTitle.textContent = `${patient.Name} - Patient Profile`;
+            
+            modalContent.innerHTML = `
+                <div class="patient-info-grid">
+                    <div class="info-group">
+                        <div class="info-label">Patient Information</div>
+                        <div class="info-value">${patient.Name}</div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <div>Age: ${patient.Age} years</div>
+                            <div>Gender: ${patient.Gender}</div>
+                            <div>Patient ID: ${patient.ID}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Contact Information</div>
+                        <div class="info-value">${patient.Contact.Phone}</div>
+                        <div style="margin-top: 5px; font-size: 0.9rem; color: var(--text-secondary);">
+                            ${patient.Contact.Email}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Therapy Details</div>
+                        <div class="info-value">${patient.Therapy}</div>
+                        <div style="margin-top: 5px; font-size: 0.9rem; color: var(--text-secondary);">
+                            Practitioner: ${patient.Practitioner}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Progress Status</div>
+                        <div class="info-value">
+                            <span class="status-badge ${patient.Status.toLowerCase() === 'active' ? 'status-active' : 'status-completed'}">
+                                ${patient.Status}
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <div class="progress-text">Day ${patient.Progress.CurrentDay} of ${patient.Progress.TotalDays}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${Math.round((patient.Progress.CurrentDay / patient.Progress.TotalDays) * 100)}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Medical History</div>
+                        <div class="info-value" style="font-size: 0.9rem; font-weight: normal;">
+                            ${patient.MedicalHistory}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Session History</div>
+                        <div class="info-value">
+                            Completed: ${patient.SessionHistory.Completed} | Missed: ${patient.SessionHistory.Missed}
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Last Feedback</div>
+                        <div class="info-value" style="font-size: 0.9rem; font-weight: normal;">
+                            "${patient.LastFeedback}"
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-label">Next Session</div>
+                        <div class="info-value">${patient.NextSession}</div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function editPatient(index) {
+            alert(`Edit patient: ${filteredPatients[index].Name}`);
+        }
+
+        function deletePatient(index) {
+            if (confirm(`Are you sure you want to delete patient ${filteredPatients[index].Name}?`)) {
+                const originalIndex = patients.indexOf(filteredPatients[index]);
+                patients.splice(originalIndex, 1);
+                filterPatients();
+                alert('Patient deleted successfully!');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('patientModal').classList.remove('active');
+        }
+
+        function openAddPatientModal() {
+            alert('Add new patient functionality would open here');
+        }
+
+        function clearFilters() {
+            document.getElementById('mainSearch').value = '';
+            document.getElementById('therapyFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            filterPatients();
+        }
+
+        function exportPatients() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Patient ID,Name,Age,Gender,Therapy,Practitioner,Status,Phone,Email\n"
+                + patients.map(p => `${p.ID},${p.Name},${p.Age},${p.Gender},${p.Therapy},${p.Practitioner},${p.Status},${p.Contact.Phone},${p.Contact.Email}`).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "patients_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+            updateDateTime();
+            renderPatientsTable();
+            updateAnalytics();
+
+            // Add event listeners for filters
+            document.getElementById('mainSearch').addEventListener('input', filterPatients);
+            document.getElementById('therapyFilter').addEventListener('change', filterPatients);
+            document.getElementById('statusFilter').addEventListener('change', filterPatients);
+            document.getElementById('startDate').addEventListener('change', filterPatients);
+            document.getElementById('endDate').addEventListener('change', filterPatients);
+
+            // Close modal when clicking outside
+            document.getElementById('patientModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+
+        // Update time every minute
+        setInterval(updateDateTime, 60000);
+
+        // Quick action handlers
+        document.querySelectorAll('.quick-action-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert(`Feature: ${this.textContent.trim()}`);
+            });
+        });
+
+        // Voice Assistant for Navigation
+        const voiceBtn = document.getElementById('voiceBtn');
+        const micIcon = document.getElementById('micIcon');
+        let recognizing = false;
+        let recognition;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-IN';
+            recognition.interimResults = false;
+            recognition.continuous = false;
+
+            recognition.onstart = function() {
+                recognizing = true;
+                micIcon.style.filter = "drop-shadow(0 0 8px #667eea)";
+            };
+            recognition.onend = function() {
+                recognizing = false;
+                micIcon.style.filter = "";
+            };
+            recognition.onerror = function(e) {
+                recognizing = false;
+                micIcon.style.filter = "";
+                alert('Voice recognition error: ' + e.error);
+            };
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                handleVoiceCommand(transcript);
+            };
+
+            voiceBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (recognizing) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+        } else {
+            voiceBtn.style.display = 'none';
+            alert('Voice assistant not supported in this browser.');
+        }
+
+        function handleVoiceCommand(command) {
+            // Navigation commands
+            if (command.includes('dashboard')) {
+                window.location.href = 'home_admin.html';
+            } else if (command.includes('patients')) {
+                window.location.href = 'patients.html';
+            } else if (command.includes('practitioner') || command.includes('therapist')) {
+                window.location.href = 'practitioner.html';
+            } else if (command.includes('schedule')) {
+                window.location.href = 'schedule.html';
+            } else if (command.includes('therapy')) {
+                window.location.href = 'therapy.html';
+            } else if (command.includes('report')) {
+                window.location.href = 'reports.html';
+            } else if (command.includes('notification')) {
+                alert('Opening notifications panel.');
+            } else if (command.includes('search')) {
+                document.getElementById('mainSearch').focus();
+            } else if (command.includes('dark mode')) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                updateThemeButton('dark');
+                localStorage.setItem('theme', 'dark');
+            } else if (command.includes('light mode')) {
+                document.documentElement.setAttribute('data-theme', 'light');
+                updateThemeButton('light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                alert('Sorry, command not recognized: ' + command);
+            }
+        }
+    </script>
+</body>
+</html>

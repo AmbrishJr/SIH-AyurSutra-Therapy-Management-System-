@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <!-- Example: Playfair Display for elegant serif italic -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,300&display=swap" rel="stylesheet">
+
+
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,300&display=swap" rel="stylesheet">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AyurSutra - My Wellness Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* CSS Variables for Theme Support */
+        :root {
+            /* Light theme variables */
+            --bg-primary: linear-gradient(135deg, #f8fafc 0%, #faf5ff 100%);
+            --bg-secondary: linear-gradient(135deg, #ffffff 0%, #fefbff 100%);
+            --bg-tertiary: linear-gradient(135deg, #f8fafc 0%, #faf5ff 100%);
+            --text-primary: #334155;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --card-bg: linear-gradient(135deg, #ffffff 0%, #fefbff 100%);
+            --border-color: #e0e7ff;
+            --shadow-light: rgba(102, 126, 234, 0.08);
+            --shadow-medium: rgba(102, 126, 234, 0.12);
+            --input-bg: white;
+            --hover-bg: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --bg-secondary: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            --bg-tertiary: linear-gradient(135deg, #334155 0%, #475569 100%);
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --card-bg: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            --border-color: #475569;
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            --shadow-medium: rgba(0, 0, 0, 0.3);
+            --input-bg: #334155;
+            --hover-bg: #475569;
+        }
+
+        :root {
+            --primary-purple: #667eea;
+            --secondary-purple: #764ba2;
+            --light-purple: #a855f7;
+            --dark-purple: #5b21b6;
+            --purple-accent: #8b5cf6;
+            --purple-light: #f3f4f6;
+            --purple-bg: #faf5ff;
+            --purple-text: #6b46c1;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --info-blue: #3b82f6;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #a855f7 0%, #6b46c1 100%);
+            --gradient-accent: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            --gradient-wellness: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        [data-theme="dark"] {
+            --purple-bg: #334155;
+            --purple-light: #475569;
+            --purple-text: #a5b4fc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .theme-toggle {
+            background: rgba(102, 126, 234, 0.9);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50px;
+            padding: 12px 18px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(118, 75, 162, 0.9);
+            border-color: rgba(118, 75, 162, 0.3);
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle:hover {
+            background: rgba(118, 75, 162, 1);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .welcome-info h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: var(--purple-text);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .patient-info {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--purple-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            color: var(--purple-text);
+        }
+
+        .header-icon:hover {
+            background: var(--primary-purple);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: var(--warning-orange);
+            border-radius: 50%;
+            color: white;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Card Base Style */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px var(--shadow-light);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--shadow-medium);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--purple-text);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        /* Therapy Overview */
+        .therapy-overview {
+            margin-bottom: 30px;
+        }
+
+        .progress-section {
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stage-info h3 {
+            color: var(--purple-text);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .stage-details {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .completion-percent {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--border-color);
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-dot.completed {
+            background: var(--success-green);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .timeline-dot.current {
+            background: var(--primary-purple);
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(102, 126, 234, 0); }
+        }
+
+        /* Upcoming Sessions */
+        .sessions-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .session-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--primary-purple);
+            transition: all 0.3s ease;
+        }
+
+        .session-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .session-title {
+            color: var(--purple-text);
+            font-weight: 500;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .session-time {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .session-details {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        /* Right Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Notifications Panel */
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.reminder {
+            background: linear-gradient(135deg, #fef3e2 0%, #fcd34d 100%);
+            color: #f59e0b;
+        }
+
+        .notification-icon.care {
+            background: linear-gradient(135deg, #ecfdf5 0%, #10b981 100%);
+            color: #059669;
+        }
+
+        .notification-icon.info {
+            background: linear-gradient(135deg, #eff6ff 0%, #3b82f6 100%);
+            color: #2563eb;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            color: var(--purple-text);
+            font-weight: 500;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .notification-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+
+        /* Feedback Section */
+        .feedback-form {
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .mood-selector {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+
+        .mood-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--input-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .mood-option:hover {
+            border-color: var(--primary-purple);
+            transform: scale(1.1);
+        }
+
+        .mood-option.selected {
+            border-color: var(--primary-purple);
+            background: var(--purple-bg);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-outline {
+            background: var(--input-bg);
+            color: var(--primary-purple);
+            border: 2px solid var(--primary-purple);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-purple);
+            color: white;
+        }
+
+        /* Quick Access Grid */
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .quick-access-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--purple-text);
+        }
+
+        .quick-access-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-light);
+            border-color: var(--primary-purple);
+        }
+
+        .quick-access-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .quick-access-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Health Metrics */
+        .health-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-item {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        /* Communication Section */
+        .chat-preview {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-message {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .chat-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .chat-content {
+            flex: 1;
+        }
+
+        .chat-name {
+            font-weight: 500;
+            color: var(--purple-text);
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .chat-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        /* Textarea styling */
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Chart placeholder */
+        .chart-placeholder {
+            height: 200px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            border: 2px dashed var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .header-content {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-container {
+                padding: 15px;
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .quick-access-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggle-container {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .theme-toggle {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--primary-purple);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+   
+
+
+    <!-- Theme toggle button (fixed position) -->
+    <div class="theme-toggle-container">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+            <span class="theme-icon" id="themeIcon">🌙</span>
+            <span id="themeText">Dark</span>
+        </button>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="profile-avatar">RK</div>
+                <div class="welcome-info">
+                    <h1>Welcome back, Rajesh</h1>
+                    <div class="patient-info">Age: 45 • Therapy: Panchakarma Detox • Day 8 of 21</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="header-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM9 18v-6h2v6H9z"/>
+                    </svg>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="header-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="notification-badge">2</span>
+                </div>
+                <div class="header-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Column -->
+        <div class="main-content">
+            <!-- Therapy Overview -->
+            <div class="card therapy-overview">
+                <div class="card-header">
+                    <h2 class="card-title">My Therapy Journey</h2>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="stage-info">
+                            <h3>Purification Phase (Shodana)</h3>
+                            <div class="stage-details">Virechana therapy • Dr. Priya Sharma</div>
+                        </div>
+                        <div class="completion-percent">38%</div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 38%;"></div>
+                    </div>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot completed"></div>
+                            <div class="timeline-label">Preparation</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot current"></div>
+                            <div class="timeline-label">Purification</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Rejuvenation</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Recovery</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Sessions -->
+                <h3 style="margin-bottom: 15px; color: var(--purple-text);">Upcoming Sessions</h3>
+                <div class="sessions-grid">
+                    <div class="session-card">
+                        <div class="session-header">
+                            <div>
+                                <div class="session-title">Abhyanga (Oil Massage)</div>
+                                <div class="session-details">Dr. Priya Sharma • Room 3</div>
+                            </div>
+                            <div class="session-time">Tomorrow 10:00 AM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="session-card">
+                        <div class="session-header">
+                            <div>
+                                <div class="session-title">Shirodhara</div>
+                                <div class="session-details">Dr. Priya Sharma • Room 2</div>
+                            </div>
+                            <div class="session-time">Sep 7, 2:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Progress -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Health Progress</h2>
+                </div>
+                
+                <div class="health-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">7.2</div>
+                        <div class="metric-label">Energy Level</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">8.5</div>
+                        <div class="metric-label">Sleep Quality</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">6.8</div>
+                        <div class="metric-label">Stress Level</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">85%</div>
+                        <div class="metric-label">Overall Wellness</div>
+                    </div>
+                </div>
+
+                <div class="chart-placeholder">
+                    📊 Weekly Progress Chart
+                </div>
+            </div>
+
+            <!-- Communication -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Communication & Support</h2>
+                </div>
+                
+                <div class="chat-preview">
+                    <div class="chat-message">
+                        <div class="chat-avatar">PS</div>
+                        <div class="chat-content">
+                            <div class="chat-name">Dr. Priya Sharma</div>
+                            <div class="chat-text">Please avoid cold drinks today. Continue with warm water only.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                        </svg>
+                        Chat with Doctor
+                    </button>
+                    <button class="btn btn-outline">📞 Helpline</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="sidebar">
+            <!-- Notifications & Precautions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Today's Care Plan</h3>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-icon reminder">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Pre-session Reminder</div>
+                        <div class="notification-text">Take light breakfast 2 hours before tomorrow's session</div>
+                    </div>
+                </div>
+
+                <div class="notification-item">
+                    <div class="notification-icon care">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Post-care Tips</div>
+                        <div class="notification-text">Rest for 30 minutes after oil massage. Avoid heavy meals.</div>
+                    </div>
+                </div>
+
+                <div class="notification-item">
+                    <div class="notification-icon info">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Dietary Guidelines</div>
+                        <div class="notification-text">Continue with Kapha-pacifying diet. Avoid dairy products.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Feedback -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">How are you feeling today?</h3>
+                </div>
+                
+                <div class="feedback-form">
+                    <div style="margin-bottom: 15px; font-weight: 500; color: var(--purple-text);">Mood Tracker</div>
+                    <div class="mood-selector">
+                        <div class="mood-option" title="Excellent">😄</div>
+                        <div class="mood-option selected" title="Good">😊</div>
+                        <div class="mood-option" title="Okay">😐</div>
+                        <div class="mood-option" title="Not Good">😟</div>
+                        <div class="mood-option" title="Poor">😔</div>
+                    </div>
+                    
+                    <textarea placeholder="Any symptoms or concerns today?" rows="3"></textarea>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">
+                        Submit Daily Feedback
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Quick Actions</h3>
+                </div>
+                
+                <div class="quick-access-grid">
+                    <a href="#" class="quick-access-item">
+                        <div class="quick-access-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="quick-access-label">My Schedule</div>
+                    </a>
+                    
+                    <a href="#" class="quick-access-item">
+                        <div class="quick-access-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM9 18v-6h2v6H9z"/>
+                            </svg>
+                        </div>
+                        <div class="quick-access-label">Notifications</div>
+                    </a>
+                    
+                    <a href="#" class="quick-access-item">
+                        <div class="quick-access-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="quick-access-label">Progress Report</div>
+                    </a>
+                    
+                    <a href="#" class="quick-access-item">
+                        <div class="quick-access-icon">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="quick-access-label">Download Report</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+       
+
+
+
+
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            updateThemeButton(newTheme);
+            
+            // Save preference to localStorage
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            }
+        }
+
+        // Load saved theme preference on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        });
+
+        // Interactive mood selector
+        document.querySelectorAll('.mood-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Progress bar animation
+        window.addEventListener('load', function() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        });
+
+        // Quick action handlers
+        document.querySelectorAll('.quick-access-item, .btn').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (this.href === '#' || this.type === 'button') {
+                    e.preventDefault();
+                    const action = this.textContent.trim();
+                    alert(`Feature: ${action}`);
+                }
+            });
+        });
+
+        // Header icon interactions
+        document.querySelectorAll('.header-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const badge = this.querySelector('.notification-badge');
+                if (badge) {
+                    alert(`You have ${badge.textContent} new notifications`);
+                }
+            });
+        });
+
+        // Auto-update time and progress
+        function updateProgress() {
+            // Simulate progress updates
+            const progressFill = document.querySelector('.progress-fill');
+            const currentWidth = parseInt(progressFill.style.width);
+            if (currentWidth < 100) {
+                // This would connect to real data in production
+            }
+        }
+
+        // Call update function periodically
+        setInterval(updateProgress, 30000); // Every 30 seconds
+    </script>
+</body>
+</html>
